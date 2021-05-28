@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+//import "./styles.css";
+// import hackernews from "./hackernews";
+import Card from "./Card";
+import React, { useState, useEffect } from "react";
 
-function App() {
+// console.log(hackernews);
+const userInput = "react";
+export default function App() {
+  const [news, setNews] = useState([]);
+  const [isFetching, changeFetchStatus] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
+      .then((res) => {
+        //res && alert();
+        setNews(res.data.hits);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="App">
+        <h1>Hacker News</h1>
+        <h5>by group1</h5>
+      </div>
+      {news.map((story) => {
+        // console.log(story);
+        return <Card content={story} key={story.objectID} />;
+      })}
+    </>
   );
 }
 
-export default App;
+// import BeatLoader from "react-spinners/BeatLoader";
