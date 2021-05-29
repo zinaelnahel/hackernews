@@ -1,25 +1,25 @@
 import React from "react";
 
 const Card = (props) => {
-  console.log(props.content);
+ // console.log(props.content);
   return (
     <div className="cardContainer">
       <div className="card">
         <div className="title">
           <div className="rank">
-            <h4>rank</h4>
+            <h4>{props.content.points}</h4>
           </div>
           <div className="titleAndSource">
             <h5>
-              {props.content.title} - {props.content.author}
+              {props.content.story_title} - {props.content.author}
             </h5>
             <h6>
-              <a href={props.content.url}>Link</a>
+              <a href={props.content.url}>{props.content.story_url}</a>
             </h6>
           </div>
         </div>
         <div className="time">
-          <div>posted .... {props.content.created_at} ago</div>
+          <div>{props.content.created_at}</div>
           <div>posted on "date"</div>
         </div>
       </div>
