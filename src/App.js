@@ -44,15 +44,16 @@ export default function App() {
 
   return (
     <>
-      <div className="App">
-        <h1>Hacker News</h1>
-        <h5>by group1</h5>
+      <div className="App row p-5">
+        <p class="fs-2">Hacker News</p>
+        <p class="fs-4">by group1</p>
       </div>
 
       <div className="Container">
-      <div className="result">
+      <div className="row p-5 result">
 
       {isFetching && (
+        <div className="col justify-content-center">
         <Loader
           visible={isFetching}
           type="ThreeDots"
@@ -60,6 +61,7 @@ export default function App() {
           height={80}
           width={80}
         />
+        </div>
       )}
 
       {news.map((story) => {
