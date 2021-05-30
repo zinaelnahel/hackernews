@@ -10,8 +10,10 @@ import Loader from "react-loader-spinner";
 const userInput = "react";
 export default function App() {
   const [news, setNews] = useState([]);
+
   //const [isFetching, changeFetchStatus] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+
 
   useEffect(() => {
     setIsFetching(true);
@@ -25,6 +27,19 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
+    let interval = setInterval(()=> {
+      // setNews([])
+         axios
+      .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
+      .then((res) => {
+        //res && alert();
+        setNews(res.data.hits);
+      })
+      .catch((err) => {
+        console.log(err);
+      });},5000);
+       
+       return () => clearInterval(interval);
   }, []);
 
   return (
@@ -33,6 +48,10 @@ export default function App() {
         <h1>Hacker News</h1>
         <h5>by group1</h5>
       </div>
+
+      <div className="Container">
+      <div className="result">
+
       {isFetching && (
         <Loader
           visible={isFetching}
@@ -42,10 +61,13 @@ export default function App() {
           width={80}
         />
       )}
+
       {news.map((story) => {
         // console.log(story);
         return <Card content={story} key={story.objectID} />;
       })}
+      </div>
+      </div>
     </>
   );
 }
