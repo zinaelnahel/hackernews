@@ -13,7 +13,8 @@ export default function App() {
 
   //const [isFetching, changeFetchStatus] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-
+  const [searchString, setSearchString] = useState([]);
+  const [filteredNews, setFilteredNews] = useState([]);
 
   useEffect(() => {
     setIsFetching(true);
@@ -22,25 +23,48 @@ export default function App() {
       .then((res) => {
         //res && alert();
         setIsFetching(false);
-        setNews(res.data.hits);
+        const news = res.data.hits;
+        setNews(news);
+        setFilteredNews([...news]);
       })
       .catch((err) => {
         console.log(err);
       });
-    let interval = setInterval(()=> {
+    let interval = setInterval(() => {
       // setNews([])
-         axios
-      .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
-      .then((res) => {
-        //res && alert();
-        setNews(res.data.hits);
-      })
-      .catch((err) => {
-        console.log(err);
-      });},5000);
-       
-       return () => clearInterval(interval);
+      axios
+        .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
+        .then((res) => {
+          //res && alert();
+          setNews(res.data.hits);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 500000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  // filter the news data based on the search term
+  useEffect(() => {
+    let filteredNews = news;
+    // console.log(news);
+    // console.log(searchString);
+    // console.log(searchString && news.length > 0);
+    if (searchString && news.length > 0) {
+      filteredNews = news.filter(
+        (news_item) =>
+          news_item.story_title.includes(searchString) ||
+          news_item.story_title.includes(searchString.toLowerCase()) ||
+          news_item.story_title.includes(
+            searchString[0].toUpperCase() + searchString.slice(1)
+          ) ||
+          news_item.story_title.includes(searchString.toUpperCase())
+      );
+    }
+    setFilteredNews(filteredNews);
+  }, [searchString, news]);
 
   return (
     <>
@@ -49,29 +73,37 @@ export default function App() {
         <p class="fs-4">by group1</p>
       </div>
 
-      <div className="Container">
-      <div className="row p-5 result">
-
-      {isFetching && (
-        <div className="col justify-content-center">
-        <Loader
-          visible={isFetching}
-          type="ThreeDots"
-          color="#00BFFF"
-          height={80}
-          width={80}
+      <form>
+        <input
+          type="text"
+          name="searchBar"
+          id="searchBar"
+          placeholder="type your search term"
+          size="40"
+          value={searchString}
+          onChange={(e) => setSearchString(e.target.value)}
         />
-        </div>
-      )}
+      </form>
 
-      {news.map((story) => {
-        // console.log(story);
-        return <Card content={story} key={story.objectID} />;
-      })}
-      </div>
+      <div className="Container">
+        <div className="row p-5 result">
+          {isFetching && (
+            <div className="col justify-content-center">
+              <Loader
+                visible={isFetching}
+                type="ThreeDots"
+                color="#00BFFF"
+                height={80}
+                width={80}
+              />
+            </div>
+          )}
+
+          {filteredNews.map((story) => (
+            <Card content={story} key={story.objectID} />
+          ))}
+        </div>
       </div>
     </>
   );
 }
-
-// import BeatLoader from "react-spinners/BeatLoader";
