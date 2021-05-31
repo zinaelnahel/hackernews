@@ -2,7 +2,7 @@ import axios from "axios";
 //import "./styles.css";
 // import hackernews from "./hackernews";
 import Card from "./Card";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 
@@ -15,9 +15,9 @@ export default function App() {
   const [isFetching, setIsFetching] = useState(false);
   const [searchString, setSearchString] = useState("");
   const [filteredNews, setFilteredNews] = useState([]);
-
-  useEffect(() => {
-    setIsFetching(true);
+  const getNews = useCallback(
+    () => {
+      setIsFetching(true);
     axios
       .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
       .then((res) => {
@@ -30,21 +30,16 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
-    let interval = setInterval(() => {
-      // setNews([])
-      axios
-        .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
-        .then((res) => {
-          //res && alert();
-          setNews(res.data.hits);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 500000);
+    },
+    [],
+  );
+  useEffect(() => {
+    getNews();},[getNews]);
 
+  useEffect(() => {
+    let interval = setInterval(() => getNews(), 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [news,getNews]);
 
   // filter the news data based on the search term
   useEffect(() => {
