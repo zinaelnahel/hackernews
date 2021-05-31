@@ -5,6 +5,7 @@ import Card from "./Card";
 import React, { useState, useEffect, useCallback } from "react";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
+import Pagination from "./Pagination";
 
 // console.log(hackernews);
 const userInput = "react";
@@ -15,9 +16,10 @@ export default function App() {
   const [isFetching, setIsFetching] = useState(false);
   const [searchString, setSearchString] = useState("");
   const [filteredNews, setFilteredNews] = useState([]);
-  const getNews = useCallback(
-    () => {
-      setIsFetching(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [newsPerPage] = useState(4);
+  const getNews = useCallback(() => {
+    setIsFetching(true);
     axios
       .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
       .then((res) => {
@@ -30,16 +32,20 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
-    },
-    [],
-  );
+  }, []);
+  const indexOfLastNews = currentPage * newsPerPage;
+  const indexOfFirstNews = indexOfLastNews - newsPerPage;
+  const currentNews = news.slice(indexOfFirstNews, indexOfLastNews);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   useEffect(() => {
-    getNews();},[getNews]);
+    getNews();
+  }, [getNews]);
 
   useEffect(() => {
     let interval = setInterval(() => getNews(), 5000);
     return () => clearInterval(interval);
-  }, [news,getNews]);
+  }, [news, getNews]);
 
   // filter the news data based on the search term
   useEffect(() => {
@@ -91,9 +97,14 @@ export default function App() {
             </div>
           )}
 
-          {filteredNews.map((story) => (
+          {currentNews.map((story) => (
             <Card content={story} key={story.objectID} />
           ))}
+          <Pagination
+            newsPerPage={newsPerPage}
+            totalNews={news.length}
+            paginate={paginate}
+          />
         </div>
       </div>
     </>
