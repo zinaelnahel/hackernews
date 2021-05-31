@@ -13,7 +13,7 @@ export default function App() {
 
   //const [isFetching, changeFetchStatus] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [searchString, setSearchString] = useState([]);
+  const [searchString, setSearchString] = useState("");
   const [filteredNews, setFilteredNews] = useState([]);
 
   useEffect(() => {
@@ -49,20 +49,17 @@ export default function App() {
   // filter the news data based on the search term
   useEffect(() => {
     let filteredNews = news;
-    // console.log(news);
-    // console.log(searchString);
-    // console.log(searchString && news.length > 0);
+    console.log(searchString.toLowerCase());
     if (searchString && news.length > 0) {
       filteredNews = news.filter(
         (news_item) =>
-          news_item.story_title.includes(searchString) ||
-          news_item.story_title.includes(searchString.toLowerCase()) ||
-          news_item.story_title.includes(
-            searchString[0].toUpperCase() + searchString.slice(1)
-          ) ||
-          news_item.story_title.includes(searchString.toUpperCase())
+          news_item.story_title !== null &&
+          news_item.story_title
+            .toLowerCase()
+            .includes(searchString.toLowerCase())
       );
     }
+
     setFilteredNews(filteredNews);
   }, [searchString, news]);
 
