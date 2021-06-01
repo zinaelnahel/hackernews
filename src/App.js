@@ -17,7 +17,7 @@ export default function App() {
   // const [searchString, setSearchString] = useState("");
   // const [filteredNews, setFilteredNews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [newsPerPage] = useState(4);
+  const [newsPerPage] = useState(10);
   const [userInput, setUserInput] = useState("");
   const getNews = useCallback(() => {
     setIsFetching(true);
@@ -50,7 +50,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [news, getNews]);
 
-  console.log(news)
+  console.log(news);
 
   // filter the news data based on the search term
   // useEffect(() => {
@@ -73,17 +73,17 @@ export default function App() {
     //alert(event.target.searchBar.value);
     setUserInput(event.target.searchBar.value);
     event.preventDefault();
-  }
+  };
 
   return (
     <>
-          <div className="row justify-between">
-      <div className="App col p-5">
-        <p className="fs-2">Hacker News</p>
-        <p className="fs-4">by group1</p>
-      </div>
-      <div className="col align-self-end">
-        {isFetching && (
+      <div className="row justify-between">
+        <div className="App col p-5">
+          <p className="fs-2">Hacker News</p>
+          <p className="fs-4">by group1</p>
+        </div>
+        <div className="col align-self-end">
+          {isFetching && (
             <div className="col ">
               <Loader
                 visible={isFetching}
@@ -94,7 +94,7 @@ export default function App() {
               />
             </div>
           )}
-      </div>
+        </div>
       </div>
       <form onSubmit={handleSubmit}>
         <input
@@ -111,11 +111,9 @@ export default function App() {
         />
         <input type="submit" value="Get News" />
       </form>
-      
+
       <div className="Container justify-content-center">
         <div className="row p-5 result">
-          
-
           {currentNews.map((story) => (
             <Card content={story} key={story.objectID} />
           ))}
@@ -127,6 +125,5 @@ export default function App() {
         </div>
       </div>
     </>
-    
   );
 }
