@@ -15,8 +15,9 @@ export default function App() {
   //const [isFetching, changeFetchStatus] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [searchString, setSearchString] = useState("");
-  const [filteredNews, setFilteredNews] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [filteredNews, setFilteredNews] = useState();
+  console.log(filteredNews);
+  const [currentPage, setCurrentPage] = useState();
   const [newsPerPage] = useState(4);
   const getNews = useCallback(() => {
     setIsFetching(true);
@@ -85,8 +86,9 @@ export default function App() {
           )}
       </div>
       </div>
-      <form>
+      <form className="row-auto">
         <input
+          autoFocus
           type="text"
           name="searchBar"
           id="searchBar"
@@ -94,6 +96,7 @@ export default function App() {
           size="40"
           value={searchString}
           onChange={(e) => setSearchString(e.target.value)}
+          className="ms-5 border-1"
         />
       </form>
 
