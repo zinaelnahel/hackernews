@@ -8,7 +8,7 @@ import Loader from "react-loader-spinner";
 import Pagination from "./Pagination";
 
 // console.log(hackernews);
-const userInput = "react";
+// const userInput = "react";
 export default function App() {
   const [news, setNews] = useState([]);
 
@@ -18,10 +18,13 @@ export default function App() {
   const [filteredNews, setFilteredNews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [newsPerPage] = useState(4);
+  const [userInput, setUserInput]=useState("");
   const getNews = useCallback(() => {
     setIsFetching(true);
     axios
-      .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
+      .get(
+        `https://hn.algolia.com/api/v1/search_by_date?query=${userInput}&tags=story`
+      )
       .then((res) => {
         //res && alert();
         setIsFetching(false);
@@ -32,7 +35,7 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [userInput]);
   const indexOfLastNews = currentPage * newsPerPage;
   const indexOfFirstNews = indexOfLastNews - newsPerPage;
   const currentNews = news.slice(indexOfFirstNews, indexOfLastNews);
@@ -43,9 +46,11 @@ export default function App() {
   }, [getNews]);
 
   useEffect(() => {
-    let interval = setInterval(() => getNews(), 5000);
+    let interval = setInterval(() => getNews(), 300000);
     return () => clearInterval(interval);
   }, [news, getNews]);
+
+  console.log(news)
 
   // filter the news data based on the search term
   useEffect(() => {
@@ -64,6 +69,11 @@ export default function App() {
     setFilteredNews(filteredNews);
   }, [searchString, news]);
   console.log(filteredNews);
+
+  const handleSubmit = (event) => {
+    alert('A search term was submitted: ' + userInput);
+    event.preventDefault();
+  }
 
   return (
     <>
@@ -86,16 +96,25 @@ export default function App() {
           )}
       </div>
       </div>
+<<<<<<< HEAD
       <form>
+=======
+
+      <form onSubmit={handleSubmit}>
+>>>>>>> 73297c754496b0a05283698a2af0a50962ff7130
         <input
           type="text"
           name="searchBar"
           id="searchBar"
           placeholder="type your search term"
+          style={{ marginLeft: 50 }}
           size="40"
-          value={searchString}
-          onChange={(e) => setSearchString(e.target.value)}
+          value={userInput}
+          onChange={(e) => {setUserInput(e.target.value)}}
+          // value={searchString}
+          // onChange={(e) => setSearchString(e.target.value)}
         />
+        <input type="submit" value="Get News" />
       </form>
 
       <div className="Container justify-content-center">
