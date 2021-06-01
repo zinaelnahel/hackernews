@@ -8,23 +8,21 @@ import Loader from "react-loader-spinner";
 import Pagination from "./Pagination";
 
 // console.log(hackernews);
-// const userInput = "react";
+const userInput = "react";
 export default function App() {
   const [news, setNews] = useState([]);
 
   //const [isFetching, changeFetchStatus] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [searchString, setSearchString] = useState("");
-  const [filteredNews, setFilteredNews] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [filteredNews, setFilteredNews] = useState();
+  console.log(filteredNews);
+  const [currentPage, setCurrentPage] = useState();
   const [newsPerPage] = useState(4);
-  const [userInput, setUserInput]=useState("");
   const getNews = useCallback(() => {
     setIsFetching(true);
     axios
-      .get(
-        `https://hn.algolia.com/api/v1/search_by_date?query=${userInput}&tags=story`
-      )
+      .get(`https://hn.algolia.com/api/v1/search_by_date?query=${userInput}`)
       .then((res) => {
         //res && alert();
         setIsFetching(false);
@@ -35,7 +33,7 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, [userInput]);
+  }, []);
   const indexOfLastNews = currentPage * newsPerPage;
   const indexOfFirstNews = indexOfLastNews - newsPerPage;
   const currentNews = news.slice(indexOfFirstNews, indexOfLastNews);
@@ -46,11 +44,9 @@ export default function App() {
   }, [getNews]);
 
   useEffect(() => {
-    let interval = setInterval(() => getNews(), 300000);
+    let interval = setInterval(() => getNews(), 5000);
     return () => clearInterval(interval);
   }, [news, getNews]);
-
-  console.log(news)
 
   // filter the news data based on the search term
   useEffect(() => {
@@ -69,38 +65,16 @@ export default function App() {
     setFilteredNews(filteredNews);
   }, [searchString, news]);
 
-  const handleSubmit = (event) => {
-    alert('A search term was submitted: ' + userInput);
-    event.preventDefault();
-  }
-
   return (
     <>
-      <div className="App row p-5">
-        <p class="fs-2">Hacker News</p>
-        <p class="fs-4">by group1</p>
+      <div className="row justify-between">
+      <div className="App col p-5">
+        <p className="fs-2">Hacker News</p>
+        <p className="fs-4">by group1</p>
       </div>
-
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="searchBar"
-          id="searchBar"
-          placeholder="type your search term"
-          style={{ marginLeft: 50 }}
-          size="40"
-          value={userInput}
-          onChange={(e) => {setUserInput(e.target.value)}}
-          // value={searchString}
-          // onChange={(e) => setSearchString(e.target.value)}
-        />
-        <input type="submit" value="Get News" />
-      </form>
-
-      <div className="Container">
-        <div className="row p-5 result">
-          {isFetching && (
-            <div className="col justify-content-center">
+      <div className="col align-self-end">
+        {isFetching && (
+            <div className="col ">
               <Loader
                 visible={isFetching}
                 type="ThreeDots"
@@ -110,6 +84,25 @@ export default function App() {
               />
             </div>
           )}
+      </div>
+      </div>
+      <form className="row-auto">
+        <input
+          autoFocus
+          type="text"
+          name="searchBar"
+          id="searchBar"
+          placeholder="type your search term"
+          size="40"
+          value={searchString}
+          onChange={(e) => setSearchString(e.target.value)}
+          className="ms-5 border-1"
+        />
+      </form>
+
+      <div className="Container justify-content-center">
+        <div className="row p-5 result">
+          
 
           {currentNews.map((story) => (
             <Card content={story} key={story.objectID} />
