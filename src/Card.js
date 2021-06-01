@@ -37,7 +37,7 @@ displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/86400
             <p className="fs-6 col-auto align-baseline text-secondary border  m-2">- {props.content.author}</p>
             </div>
             
-            <a className="text-wrap btn btn-light text-black-50 m-1 fs-6 fw-lighter" data-bs-toggle="offcanvas" href={props.content.url} role="button" aria-controls="offcanvasExample">{truncate(`${props.content.story_url}`,25)}</a>
+            <a className="text-wrap btn btn-light text-black-50 m-1 fs-6 fw-lighter" data-bs-toggle="offcanvas" href={props.content.url} role="button" aria-controls="offcanvasExample">{truncate(`${props.content.url}`,25)}</a>
               
             
           </div>

@@ -14,23 +14,23 @@ export default function App() {
 
   //const [isFetching, changeFetchStatus] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [searchString, setSearchString] = useState("");
-  const [filteredNews, setFilteredNews] = useState([]);
+  // const [searchString, setSearchString] = useState("");
+  // const [filteredNews, setFilteredNews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [newsPerPage] = useState(4);
-  const [userInput, setUserInput]=useState("");
+  const [userInput, setUserInput] = useState("");
   const getNews = useCallback(() => {
     setIsFetching(true);
     axios
       .get(
-        `https://hn.algolia.com/api/v1/search_by_date?query=${userInput}&tags=story`
+        `https://hn.algolia.com/api/v1/search_by_date?query=${userInput}&restrictSearchableAttributes=title`
       )
       .then((res) => {
         //res && alert();
         setIsFetching(false);
         const news = res.data.hits;
         setNews(news);
-        setFilteredNews([...news]);
+        //setFilteredNews([...news]);
       })
       .catch((err) => {
         console.log(err);
@@ -46,31 +46,32 @@ export default function App() {
   }, [getNews]);
 
   useEffect(() => {
-    let interval = setInterval(() => getNews(), 5000);
+    let interval = setInterval(() => getNews(), 30000);
     return () => clearInterval(interval);
   }, [news, getNews]);
 
   console.log(news)
 
   // filter the news data based on the search term
-  useEffect(() => {
-    let filteredNews = news;
-    console.log(searchString.toLowerCase());
-    if (searchString && news.length > 0) {
-      filteredNews = news.filter(
-        (news_item) =>
-          news_item.story_title !== null &&
-          news_item.story_title
-            .toLowerCase()
-            .includes(searchString.toLowerCase())
-      );
-    }
+  // useEffect(() => {
+  //   let filteredNews = news;
+  //   console.log(searchString.toLowerCase());
+  //   if (searchString && news.length > 0) {
+  //     filteredNews = news.filter(
+  //       (news_item) =>
+  //         news_item.story_title !== null &&
+  //         news_item.story_title
+  //           .toLowerCase()
+  //           .includes(searchString.toLowerCase())
+  //     );
+  //   }
 
-    setFilteredNews(filteredNews);
-  }, [searchString, news]);
+  //   setFilteredNews(filteredNews);
+  // }, [searchString, news]);
 
   const handleSubmit = (event) => {
-    alert('A search term was submitted: ' + userInput);
+    //alert(event.target.searchBar.value);
+    setUserInput(event.target.searchBar.value);
     event.preventDefault();
   }
 
@@ -103,8 +104,8 @@ export default function App() {
           placeholder="type your search term"
           style={{ marginLeft: 50 }}
           size="40"
-          value={userInput}
-          onChange={(e) => {setUserInput(e.target.value)}}
+          defaultValue={userInput}
+          //onChange={(e) => {setUserInput(e.target.value)}}
           // value={searchString}
           // onChange={(e) => setSearchString(e.target.value)}
         />
