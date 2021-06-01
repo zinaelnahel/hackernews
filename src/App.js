@@ -60,11 +60,25 @@ export default function App() {
 
   return (
     <>
-      <div className="App row p-5">
-        <p class="fs-2">Hacker News</p>
-        <p class="fs-4">by group1</p>
+      <div className="row justify-between">
+      <div className="App col p-5">
+        <p className="fs-2">Hacker News</p>
+        <p className="fs-4">by group1</p>
       </div>
-
+      <div className="col align-self-end">
+        {isFetching && (
+            <div className="col ">
+              <Loader
+                visible={isFetching}
+                type="ThreeDots"
+                color="#00BFFF"
+                height={80}
+                width={80}
+              />
+            </div>
+          )}
+      </div>
+      </div>
       <form>
         <input
           type="text"
@@ -77,19 +91,9 @@ export default function App() {
         />
       </form>
 
-      <div className="Container">
+      <div className="Container justify-content-center">
         <div className="row p-5 result">
-          {isFetching && (
-            <div className="col justify-content-center">
-              <Loader
-                visible={isFetching}
-                type="ThreeDots"
-                color="#00BFFF"
-                height={80}
-                width={80}
-              />
-            </div>
-          )}
+          
 
           {filteredNews.map((story) => (
             <Card content={story} key={story.objectID} />
