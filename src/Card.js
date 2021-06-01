@@ -43,13 +43,8 @@ displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/86400
         </div>
         <div className="time">
           <div className="text-success text-end">{displayedTime} ago</div>
-         
         </div>
-         
-       
-      
       </div>
-     
     </div>
   );
 };
