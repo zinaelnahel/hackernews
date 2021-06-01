@@ -32,7 +32,7 @@ displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/86400
           <div className="titleAndSource">
             <div className="row justify-content-between align-items-end p-2">
               <p className="col-auto fs-6">
-              {props.content.story_title} 
+              {props.content.title} 
             </p>
             <p className="fs-6 col-auto align-baseline text-secondary border  m-2">- {props.content.author}</p>
             </div>
