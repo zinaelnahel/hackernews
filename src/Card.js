@@ -23,20 +23,21 @@ displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/3600)
 displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/86400)} days `
 }
   return (
-    <div className="cardContainer col-6 ">
-      <div className="border-2 border rounded-3 p-3 mb-4">
+    <div className="cardContainer col-md-12 col-xl-6 col-sm-12">
+      <div className="border-2 border rounded-3 p-2 mb-4 shadow">
         <div className="title">
           <div className="rank">
             <h4>{props.content.points}</h4>
           </div>
           <div className="titleAndSource">
             <div className="row justify-content-between align-items-end p-2">
-              <p className="col-auto fs-5">
+              <p className="col-auto fs-6">
               {props.content.story_title} 
             </p>
-            <p className="fs-6 col-auto align-baseline text-secondary border">- {props.content.author}</p>
+            <p className="fs-6 col-auto align-baseline text-secondary border  m-2">- {props.content.author}</p>
             </div>
-            <a className="btn btn-light text-black-50 m-1 fs-6 " data-bs-toggle="offcanvas" href={props.content.url} role="button" aria-controls="offcanvasExample">{truncate(`${props.content.story_url}`,25)}</a>
+            
+            <a className="text-wrap btn btn-light text-black-50 m-1 fs-6 fw-lighter" data-bs-toggle="offcanvas" href={props.content.url} role="button" aria-controls="offcanvasExample">{truncate(`${props.content.story_url}`,25)}</a>
               
             
           </div>
