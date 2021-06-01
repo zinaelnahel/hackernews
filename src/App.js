@@ -63,6 +63,7 @@ export default function App() {
 
     setFilteredNews(filteredNews);
   }, [searchString, news]);
+  console.log(filteredNews);
 
   return (
     <>
