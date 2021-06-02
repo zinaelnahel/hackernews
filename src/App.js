@@ -17,7 +17,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [newsPerPage] = useState(20);
-  const [userInput, setUserInput] = useState("");
+  const [userInput, setUserInput] = useState("react");
 
   const getNews = useCallback(() => {
     setIsFetching(true);
