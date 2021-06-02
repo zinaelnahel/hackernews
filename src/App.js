@@ -18,9 +18,10 @@ export default function App() {
 
   const [newsPerPage] = useState(20);
   const [userInput, setUserInput] = useState("");
-
+  const [error, setError] = useState()
   const getNews = useCallback(() => {
     setIsFetching(true);
+    setError();
     if(userInput==="")
     {axios
       .get(
@@ -35,6 +36,7 @@ export default function App() {
       })
       .catch((err) => {
         console.log(err);
+        setError(err.message)
       });}else{
         axios
       .get(
@@ -49,6 +51,7 @@ export default function App() {
       })
       .catch((err) => {
         console.log(err);
+        setError(err.message);
       });
       }
   }, [userInput]);
@@ -83,8 +86,8 @@ export default function App() {
     <>
       <div className="row justify-between">
         <div className="App col p-5">
-          <p className="fs-2">Hacker News</p>
-          <p className="fs-4">by group1</p>
+          <p className="fs-2 ps-3">Hacker News</p>
+          <p className="fs-4 ps-3">by group1</p>
         </div>
         <div className="col align-self-end">
           {isFetching && (
@@ -114,12 +117,17 @@ export default function App() {
       </form>
 
       <div className="Container justify-content-center">
+        
         <div className="row p-5 result">
-          {currentNews.length >= 1 ? (
+          {error && <h5>Ooops...</h5>}
+          {!isFetching && currentNews.length === 0 &&<h5>No news match your search</h5> }
+          {!isFetching && currentNews.length >=1 && currentNews.map((story,index) => (<Card content={story} key={story.objectID} index={index} />))}
+              
+          {/* {currentNews.length >= 1 ? (
 
               currentNews.map((story,index) => (<Card content={story} key={story.objectID} index={index} />)))
               :(<h5>No news match your search</h5>)
-          }
+          } */}
 
           <Pagination
             newsPerPage={newsPerPage}
