@@ -15,13 +15,15 @@ export default function App() {
   //const [isFetching, changeFetchStatus] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [newsPerPage] = useState(10);
-  const [userInput, setUserInput] = useState("it xh");
+
+  const [newsPerPage] = useState(20);
+  const [userInput, setUserInput] = useState("");
+
   const getNews = useCallback(() => {
     setIsFetching(true);
     axios
       .get(
-        `https://hn.algolia.com/api/v1/search_by_date?query=${userInput}&restrictSearchableAttributes=title`
+        `https://hn.algolia.com/api/v1/search_by_date?query=${userInput}&restrictSearchableAttributes=title&hitsPerPage=100`
       )
       .then((res) => {
         //res && alert();
@@ -53,12 +55,12 @@ export default function App() {
   const handleSubmit = (event) => {
     //alert(event.target.searchBar.value);
     let b = event.target.searchBar.value;
-    if (b === "" ||
-        b.split(" ").join("") === "")
-        {alert("Please enter a valid search term")}
-    else {
-        setUserInput(b);
-        event.preventDefault();}
+    if (b === "" || b.split(" ").join("") === "") {
+      alert("Please enter a valid search term");
+    } else {
+      setUserInput(b);
+      event.preventDefault();
+    }
   };
 
   return (
@@ -98,9 +100,11 @@ export default function App() {
       <div className="Container justify-content-center">
         <div className="row p-5 result">
           {currentNews.length >= 1 ? (
+
               currentNews.map((story,index) => (<Card content={story} key={story.objectID} index={index} />)))
               :(<h5>No news match your search</h5>)
           }
+
           <Pagination
             newsPerPage={newsPerPage}
             totalNews={news.length}
@@ -111,4 +115,3 @@ export default function App() {
     </>
   );
 }
-

@@ -31,10 +31,8 @@ displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/86400
         <div className="title">
           <div className="titleAndSource">
             <div className="row justify-content-between align-items-end p-2">
-              <p className="col-auto">
-              <b>{props.index +1}.</b> {props.content.title} 
-              </p>
-            <p className="col-auto align-baseline text-secondary border  m-2">by {props.content.author}</p>
+            <a class="col-auto" href={props.content.url} role="button" rel="noopener noreferrer" style={{textDecoration:"none", color:"black" }}><b>{props.index +1}.</b> {props.content.title}</a>
+            <p className="fs-6 col-auto align-baseline text-secondary border  m-2">- {props.content.author}</p>
             </div>
             
             <a className="url text-wrap btn btn-light text-black-50 m-1 "  href={`${props.content.url}`} target="_blank" rel="noreferrer noopener">{url &&url.hostname}</a>
