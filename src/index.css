@@ -15,7 +15,7 @@ code {
 .titleAndSource{
   font-size: 0.8em;
 }
-.author{
+.authors{
   font-size: 0.8em;
 }
 .url{
@@ -25,5 +25,8 @@ code {
   font-size: 0.8em;
 }
 .points{
+  font-size: 0.8em;
+}
+p{
   font-size: 0.8em;
 }

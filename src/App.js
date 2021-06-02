@@ -17,11 +17,26 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [newsPerPage] = useState(20);
-  const [userInput, setUserInput] = useState("react");
+  const [userInput, setUserInput] = useState("");
 
   const getNews = useCallback(() => {
     setIsFetching(true);
-    axios
+    if(userInput==="")
+    {axios
+      .get(
+        `https://hn.algolia.com/api/v1/search?tags=front_page`
+      )
+      .then((res) => {
+        //res && alert();
+        setIsFetching(false);
+        const news = res.data.hits;
+        setNews(news);
+        //setFilteredNews([...news]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });}else{
+        axios
       .get(
         `https://hn.algolia.com/api/v1/search_by_date?query=${userInput}&restrictSearchableAttributes=title&hitsPerPage=100`
       )
@@ -35,6 +50,7 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
+      }
   }, [userInput]);
   const indexOfLastNews = currentPage * newsPerPage;
   const indexOfFirstNews = indexOfLastNews - newsPerPage;

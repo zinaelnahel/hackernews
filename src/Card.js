@@ -2,8 +2,13 @@ import React from "react";
 
 
 const Card = (props) => {
-console.log(props);
-const url = new URL(props.content.url)
+
+let url;
+if(props.content.url){
+url=new URL(props.content.url);
+}else{
+  url=new URL("https://www.google.com")
+}
 //  function truncate(str, n){ //shorten the url
 //   return (str.length > n) ? str.substr(0, n-1) + ' ...' : str;
 // };
@@ -23,25 +28,28 @@ displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/3600)
 }else if(howLongAgoInSeconds<31557600){
 displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/86400)} day `
 }else{
-  displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/86400)} days `
+  displayedTime = `${Math.floor((Date.now()/1000-props.content.created_at_i)/172800)} days `
 }
   return (
     <div className="cardContainer col-md-12 col-xl-6 col-sm-12">
       <div className="border-2 border rounded-3 p-2 mb-4 shadow">
-        <div className="title">
+        <div className="title row">
           <div className="titleAndSource">
-            <div className="row justify-content-between align-items-end p-2">
-            <a class="col-auto" href={props.content.url} role="button" rel="noopener noreferrer" style={{textDecoration:"none", color:"black" }}><b>{props.index +1}.</b> {props.content.title}</a>
-            <p className="fs-6 col-auto align-baseline text-secondary border  m-2">- {props.content.author}</p>
+            <div className="row align-items-baseline ps-2">
+            <a className="col-auto" href={props.content.url} target="_blank" role="button" rel="noopener noreferrer" style={{textDecoration:"none", color:"black" }}><b>{props.index +1}.</b> {props.content.title}</a>
+             <a className="col-auto url text-wrap btn btn-light text-black-50 m-1 p-1"  href={`${props.content.url}`} target="_blank" rel="noreferrer noopener">{url.hostname ? url.hostname : props.content.url}</a>
+            
             </div>
             
-            <a className="url text-wrap btn btn-light text-black-50 m-1 "  href={`${props.content.url}`} target="_blank" rel="noreferrer noopener">{url &&url.hostname}</a>
+           
           </div>
         </div>
-        <div className="time row">
-          <div className="col points">
+        <div className="time row align-items-baseline ps-2">
+          <div className="col-auto points">
           {props.content.points} points
           </div>
+          <div className=" col-auto  text-secondary border authors m-2">by {props.content.author}</div>
+          <div className=" col-auto  text-secondary  authors m-2">{props.content.num_comments} comments</div>
           <div className="col text-success text-end">{displayedTime} ago</div>
         </div>
       </div>
