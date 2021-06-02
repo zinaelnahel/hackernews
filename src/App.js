@@ -14,8 +14,6 @@ export default function App() {
 
   //const [isFetching, changeFetchStatus] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  // const [searchString, setSearchString] = useState("");
-  // const [filteredNews, setFilteredNews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [newsPerPage] = useState(10);
   const [userInput, setUserInput] = useState("");
@@ -52,27 +50,15 @@ export default function App() {
 
   console.log(news);
 
-  // filter the news data based on the search term
-  // useEffect(() => {
-  //   let filteredNews = news;
-  //   console.log(searchString.toLowerCase());
-  //   if (searchString && news.length > 0) {
-  //     filteredNews = news.filter(
-  //       (news_item) =>
-  //         news_item.story_title !== null &&
-  //         news_item.story_title
-  //           .toLowerCase()
-  //           .includes(searchString.toLowerCase())
-  //     );
-  //   }
-
-  //   setFilteredNews(filteredNews);
-  // }, [searchString, news]);
-
   const handleSubmit = (event) => {
     //alert(event.target.searchBar.value);
-    setUserInput(event.target.searchBar.value);
-    event.preventDefault();
+    let b = event.target.searchBar.value;
+    if (b === "" ||
+        b.split(" ").join("") === "")
+        {alert("Please enter a valid search term")}
+    else {
+        setUserInput(b);
+        event.preventDefault();}
   };
 
   return (
@@ -105,18 +91,16 @@ export default function App() {
           style={{ marginLeft: 50 }}
           size="40"
           defaultValue={userInput}
-          //onChange={(e) => {setUserInput(e.target.value)}}
-          // value={searchString}
-          // onChange={(e) => setSearchString(e.target.value)}
         />
         <input type="submit" value="Get News" />
       </form>
 
       <div className="Container justify-content-center">
         <div className="row p-5 result">
-          {currentNews.map((story) => (
-            <Card content={story} key={story.objectID} />
-          ))}
+          {currentNews.length >= 1 ? (
+              currentNews.map((story) => (<Card content={story} key={story.objectID} />)))
+              :(<h5>No news match your search</h5>)
+          }
           <Pagination
             newsPerPage={newsPerPage}
             totalNews={news.length}
@@ -127,3 +111,4 @@ export default function App() {
     </>
   );
 }
+
